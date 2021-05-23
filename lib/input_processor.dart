@@ -1,4 +1,4 @@
-﻿class InputProcessor
+class InputProcessor
 {
     static final RegExp _symbols = RegExp(r'[ ./_\-\\]');
 
@@ -12,7 +12,7 @@
         for (int i = 0; i < inputLength; i++)
         {
             String currentChar = lowerInput[i];
-            String nextChar = i == inputLength - 1 ? null : lowerInput[i + 1];
+            String? nextChar = i == inputLength - 1 ? null : lowerInput[i + 1];
 
             if (_symbols.hasMatch(currentChar)) continue;
 
@@ -28,7 +28,7 @@
         return group;
     }
 
-    static bool isEndOfWord(String nextChar)
+    static bool isEndOfWord(String? nextChar)
     {
        return nextChar == null || _symbols.hasMatch(nextChar);
     }
