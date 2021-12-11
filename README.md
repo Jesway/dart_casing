@@ -39,6 +39,3 @@ Please file any issues, bugs or feature request [here](https://github.com/bratan
 ## License
 
 This project is licensed under the [MIT License](https://github.com/bratan/dart_casing/blob/master/LICENSE)
-
-## Author
-This Dart package is developed by [Florin Bratan](https://github.com/bratan). You can contact me at <florin@leadcode.dev>
