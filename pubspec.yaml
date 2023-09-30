@@ -1,8 +1,11 @@
 name: dart_casing
 description: Dart library for changing String case style to the desired convention.
-version: 2.0.0
-homepage: https://bratan.me
-repository: https://github.com/bratan/dart_casing
+version: 3.0.0
+homepage: https://jesway.com
+repository: https://github.com/Jesway/Dart-Casing
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=3.1.1 <4.0.0'
+  
+dev_dependencies:
+  test: 1.24.6
