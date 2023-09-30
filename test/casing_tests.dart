@@ -110,5 +110,9 @@ void main() {
       expect(Casing.upperCase("my lower case word"), equals('MY LOWER CASE WORD'));
       expect(Casing.upperCase("MY UPPER CASE WORD"), equals('MY UPPER CASE WORD'));
     });
+
+    test('titleCase should correctly split and convert strings with digits at the beginning, middle, and end', () {
+      expect(Casing.titleCase("123add456User789"), equals('123 Add 456 User 789'));
+    });
   });
 }
