@@ -1,6 +1,6 @@
 name: dart_casing
 description: Dart library for changing String case style to the desired convention.
-version: 3.0.0
+version: 3.0.1
 homepage: https://jesway.com
 repository: https://github.com/Jesway/Dart-Casing
 
