@@ -1,27 +1,30 @@
 library dart_casing;
 
-import 'package:dart_casing/input_processor.dart';
-
 class Casing
 {
-    static String camelCase(String input)
-    {
-        final group = InputProcessor.getWordsGroup(input);
+    static final RegExp _symbols = RegExp(r'[ ./_\-\\]');
+    static final RegExp _camelPascalCase = RegExp(r'(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
+
+    static String camelCase(String input) {
+        final group = _getWordsGroup(input);
         final buffer = StringBuffer();
 
-        for(int i = 0; i < group.length; i++)
-        {
+        for (int i = 0; i < group.length; i++) {
             var word = group[i];
 
-            buffer.write(i == 0 ? word : _uppercaseFirst(word));
-        }
-
-        return buffer.toString();
+            if (i == 0) {
+                buffer.write(word.toLowerCase());
+            } else {
+                buffer.write(_uppercaseFirst(word.toLowerCase()));
+            }
     }
+
+    return buffer.toString();
+}
 
     static String pascalCase(String input)
     {
-        final group = InputProcessor.getWordsGroup(input).map(_uppercaseFirst);
+        final group = _getWordsGroup(input).map(_uppercaseFirst);
 
         return group.join();
     }
@@ -31,7 +34,7 @@ class Casing
         return lowerCase(input, separator: "_");
     }
 
-    static String paramCase(String input)
+    static String kebabCase(String input)
     {
         return lowerCase(input, separator: "-");
     }
@@ -48,21 +51,21 @@ class Casing
 
     static String titleCase(String input, {String separator = " "})
     {
-        final group = InputProcessor.getWordsGroup(input).map(_uppercaseFirst);
+        final group = _getWordsGroup(input).map(_uppercaseFirst);
 
         return group.join(separator);
     }
 
     static String lowerCase(String input, {String separator = " "})
     {
-        final group = InputProcessor.getWordsGroup(input);
+        final group = _getWordsGroup(input);
 
         return group.join(separator);
     }
 
     static String upperCase(String input, {String separator = " "})
     {
-        final group = InputProcessor.getWordsGroup(input).map((x) => x.toUpperCase());
+        final group = _getWordsGroup(input).map((x) => x.toUpperCase());
 
         return group.join(separator);
     }
@@ -70,5 +73,48 @@ class Casing
     static String _uppercaseFirst(String word)
     {
         return word.replaceRange(0, 1, word[0].toUpperCase());
+    }
+
+    static List<String> _getWordsGroup(String input)
+    {
+         final buffer = StringBuffer();
+    List<String> group = [];
+
+    for (int i = 0; i < input.length; i++) {
+        String currentChar = input[i];
+        String? nextChar = i == input.length - 1 ? null : input[i + 1];
+
+        if (_symbols.hasMatch(currentChar)) continue;
+
+        bool isUppercase = currentChar.toUpperCase() == currentChar;
+        bool isNextUppercase = nextChar?.toUpperCase() == nextChar;
+
+        if (isUppercase && buffer.isNotEmpty && !isNextUppercase) {
+            group.add(buffer.toString());
+            buffer.clear();
+        }
+
+        buffer.write(currentChar);
+
+        if (_isEndOfWord(nextChar)) {
+            group.add(buffer.toString());
+            buffer.clear();
+        }
+    }
+
+    // Split CamelCase and PascalCase strings
+    group = group.expand((word) {
+        if (_camelPascalCase.hasMatch(word)) {
+            return word.split(_camelPascalCase);
+        }
+        return [word];
+    }).toList();
+
+    return group.map((e) => e.toLowerCase()).toList();
+    }
+
+    static bool _isEndOfWord(String? nextChar)
+    {
+    return nextChar == null || _symbols.hasMatch(nextChar);
     }
 }
