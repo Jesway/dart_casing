@@ -85,6 +85,7 @@ void main() {
       expect(Casing.titleCase("my.dot.case.word"), equals('My Dot Case Word'));
       expect(Casing.titleCase("my lower case word"), equals('My Lower Case Word'));
       expect(Casing.titleCase("MY UPPER CASE WORD"), equals('My Upper Case Word'));
+      expect(Casing.titleCase("An Article Title To Test"), equals('An Article Title to Test'));
     });
 
     test('lowerCase should convert various inputs to lower case', () {
