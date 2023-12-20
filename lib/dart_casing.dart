@@ -57,12 +57,65 @@ class Casing
         return upperCase(input, separator: "_");
     }
 
-    static String titleCase(String input, {String separator = " "})
-    {
-        final group = _getWordsGroup(input).map(_uppercaseFirst);
+    // following APA Style guide:
+  // - https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case
+  static String titleCase(String input, {String separator = " "})
+  {
+    List<String> group = _getWordsGroup(input);
 
-        return group.join(separator);
-    }
+    // exclusion list
+    List<String> exclusionListEng = [
+      // articles
+      'a',
+      'an',
+      'the',
+      // coordinating conjunctions
+      'and',
+      'but',
+      'for',
+      // 'nor', // not NYT-style
+      'or',
+      // 'so', // not NYT-style
+      'yet',
+      // short prepositions (< 4 chars)
+      'as',
+      'at',
+      'by',
+      'en',
+      'if',
+      'in',
+      'of',
+      // 'off', // not NYT-style
+      'on',
+      'per',
+      'to',
+      // 'up', // not NYT-style
+      'v.',
+      'via',
+      'vs.'
+    ];
+    List<String> punctuationList = [':', '--', '.', '?', '!'];
+
+    // apply Title Case
+    group = group.asMap().entries.map((word) {
+      var isFirstWord = word.key == 0;
+      var isAfterPunctuation =
+          !isFirstWord && punctuationList.contains(group[word.key - 1]);
+      var isExcluded = exclusionListEng.contains(word.value);
+
+      // If NOT first word exception AND is NOT after punctuation AND is part of the exclusion list
+      if (!isFirstWord && !isAfterPunctuation && isExcluded) {
+        // return word unchanged
+        return word.value;
+      }
+
+      // capitalize first letter of word
+      return _uppercaseFirst(word.value);
+    }).toList();
+
+    // rejoin words into sentence string
+    return group.join(separator);
+  }
 
     static String lowerCase(String input, {String separator = " "})
     {
